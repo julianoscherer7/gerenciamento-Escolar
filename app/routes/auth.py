@@ -1,11 +1,16 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, session
 from models import *
-from werkzeug.security import check_password_hash, generate_password_hash
 import logging
+from urllib.parse import urlparse, urljoin
 
 auth = Blueprint('auth', __name__)
 
 logger = logging.getLogger(__name__)
+
+def is_safe_url(target):
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -18,10 +23,14 @@ def login():
         if usuario and usuario.Senha == senha:
             session['user_id'] = usuario.ID_usuario
             logger.info(f"Login bem-sucedido para o usuário: {usuario.Nome}")
-            return jsonify({'success': True, 'redirect': next_url})
+            if is_safe_url(next_url):
+                return redirect(next_url)
+            else:
+                return redirect(url_for('main.home'))
         else:
             logger.warning(f"Falha no login para o email: {email}")
-            return jsonify({'success': False, 'message': 'Credenciais inválidas. Por favor, tente novamente.'})
+            flash('Credenciais inválidas. Por favor, tente novamente.', 'error')
+            return redirect(url_for('auth.login'))
     next_url = request.args.get('next', url_for('main.home'))
     return render_template('login.html', next=next_url)
 
@@ -42,7 +51,7 @@ def register_student():
             flash('Email já cadastrado.', 'error')
             return redirect(url_for('auth.register_student'))
         
-        novo_aluno = Usuario(Nome=nome, Cargo='Aluno', Email=email, Senha=generate_password_hash(senha))
+        novo_aluno = Usuario(Nome=nome, Cargo='Aluno', Email=email, Senha=senha)
         db.session.add(novo_aluno)
         db.session.commit()
         
