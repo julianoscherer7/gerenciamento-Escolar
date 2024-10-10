@@ -13,7 +13,7 @@ def admin_required(f):
         usuario = Usuario.query.get(session['user_id'])
         if usuario.Cargo != 'Administrador':
             flash('Acesso negado. Apenas administradores podem acessar esta página.', 'error')
-            return redirect(url_for('main.dashboard'))
+            return redirect(url_for('main.home'))
         return f(*args, **kwargs)
     return decorated_function
 
