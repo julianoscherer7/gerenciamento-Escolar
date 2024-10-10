@@ -71,7 +71,7 @@ def register():
             
             flash('Andar registrado com sucesso!', 'success')
         
-        return redirect(url_for('main.dashboard'))
+        return redirect(url_for('main.home'))
     
     return render_template('register.html')
 
@@ -115,7 +115,7 @@ def register_user():
             
             flash('Recurso registrado com sucesso!', 'success')
         
-        return redirect(url_for('main.dashboard'))
+        return redirect(url_for('main.home'))
     
     return render_template('register_user.html')
 
