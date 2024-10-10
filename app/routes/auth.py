@@ -1,11 +1,35 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, session
 from models import *
+from functools import wraps
 from werkzeug.security import check_password_hash, generate_password_hash
 import logging
 
 auth = Blueprint('auth', __name__)
 
 logger = logging.getLogger(__name__)
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            flash('Por favor, faça login para acessar esta página.', 'error')
+            return redirect(url_for('auth.login', next=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            flash('Por favor, faça login para acessar esta página.', 'error')
+            return redirect(url_for('auth.login', next=request.url))
+        usuario = Usuario.query.get(session['user_id'])
+        if usuario.Cargo != 'Administrador':
+            flash('Acesso negado. Apenas administradores podem acessar esta página.', 'error')
+            return redirect(url_for('main.home'))
+        return f(*args, **kwargs)
+    return decorated_function
+
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -30,26 +54,6 @@ def logout():
     session.pop('user_id', None)
     flash('Você foi desconectado.', 'info')
     return redirect(url_for('main.home'))
-
-@auth.route('/register-student', methods=['GET', 'POST'])
-def register_student():
-    if request.method == 'POST':
-        nome = request.form['nome']
-        email = request.form['email']
-        senha = request.form['senha']
-        
-        if Usuario.query.filter_by(Email=email).first():
-            flash('Email já cadastrado.', 'error')
-            return redirect(url_for('auth.register_student'))
-        
-        novo_aluno = Usuario(Nome=nome, Cargo='Aluno', Email=email, Senha=generate_password_hash(senha))
-        db.session.add(novo_aluno)
-        db.session.commit()
-        
-        flash('Cadastro realizado com sucesso!', 'success')
-        return redirect(url_for('auth.login'))
-    
-    return render_template('register_student.html')
 
 @auth.route('/schedule', methods=['GET', 'POST'])
 def schedule():
