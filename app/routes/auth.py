@@ -55,7 +55,7 @@ def login():
 def logout():
     session.pop('user_id', None)
     flash('Você foi desconectado.', 'info')
-    return redirect(url_for('main.home', _external=True))
+    return redirect(url_for('main.home'))
 
 @auth.route('/schedule', methods=['GET', 'POST'])
 def schedule():
