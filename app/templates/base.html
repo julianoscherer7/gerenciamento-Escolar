@@ -161,18 +161,13 @@
             </div>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/">
+                    <a class="nav-link active" href="{{ url_for('main.home') }}">
                         <i class="fas fa-home me-2"></i> Início
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/register">
-                        <i class="fas fa-building me-2"></i> Registro de Infraestrutura
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/register-user">
-                        <i class="fas fa-users me-2"></i> Registro de Usuários e Recursos
+                    <a class="nav-link" href="{{ url_for('admin.admin_panel') }}">
+                        <i class="fas fa-user-shield me-2"></i> Painel de Admin
                     </a>
                 </li>
                 <li class="nav-item">
@@ -181,13 +176,13 @@
                     </a>
                     <ul class="collapse list-unstyled" id="prediosSubmenu">
                         <li>
-                            <a class="nav-link" href="/predio/1">Prédio 1</a>
+                            <a class="nav-link" href="#">Prédio 1</a>
                         </li>
                         <li>
-                            <a class="nav-link" href="/predio/2">Prédio 2</a>
+                            <a class="nav-link" href="#">Prédio 2</a>
                         </li>
                         <li>
-                            <a class="nav-link" href="/predio/3">Prédio 3</a>
+                            <a class="nav-link" href="#">Prédio 3</a>
                         </li>
                     </ul>
                 </li>
@@ -197,13 +192,13 @@
                     </a>
                     <ul class="collapse list-unstyled" id="andaresSubmenu">
                         <li>
-                            <a class="nav-link" href="/andar/1">Andar 1</a>
+                            <a class="nav-link" href="#">Andar 1</a>
                         </li>
                         <li>
-                            <a class="nav-link" href="/andar/2">Andar 2</a>
+                            <a class="nav-link" href="#">Andar 2</a>
                         </li>
                         <li>
-                            <a class="nav-link" href="/andar/3">Andar 3</a>
+                            <a class="nav-link" href="#">Andar 3</a>
                         </li>
                     </ul>
                 </li>
@@ -228,7 +223,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
                                 <li><a class="dropdown-item" href="#">Configurações</a></li>
-                                <li><a class="dropdown-item" href="/logout">Sair</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Sair</a></li>
                             </ul>
                         </div>
                     </div>
