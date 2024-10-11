@@ -1,12 +1,12 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request, send_from_directory
 from models import *
-from .auth import login_required
+from .auth import admin_required
 
 data_register = Blueprint('data_register', __name__)
 
-@data_register.route('/data_register', methods=['GET', 'POST'])
-@login_required
-def register():
+@data_register.route('/infra_register', methods=['GET', 'POST'])
+@admin_required
+def infra_register():
     if request.method == 'POST':
         if 'cadastro_salas' in request.form:
             nome_sala = request.form['nomeSala']
@@ -58,7 +58,7 @@ def register():
     return render_template('data_register.html')
 
 @data_register.route('/register-professor', methods=['GET', 'POST'])
-@login_required
+@admin_required
 def register_professor():
     if request.method == 'POST':
         nome_professor = request.form['nomeProfessor']
@@ -77,7 +77,7 @@ def register_professor():
     return render_template('register_professor.html')
 
 @data_register.route('/register-user', methods=['GET', 'POST'])
-@login_required
+@admin_required
 def register_user():
     if request.method == 'POST':
         nome_usuario = request.form['nomeUsuario']
@@ -95,7 +95,7 @@ def register_user():
     return render_template('register_user.html')
 
 @data_register.route('/register-resource', methods=['GET', 'POST'])
-@login_required
+@admin_required
 def register_resource():
     if request.method == 'POST':
         quantidade = request.form['quantidadeRecurso']
