@@ -13,7 +13,7 @@ def login_required(f):
     def decorated_function(*args, **kwargs):
         if 'user_id' not in session:
             flash('Por favor, faça login para acessar esta página.', 'error')
-            return redirect(url_for('auth.login', next=request.url))
+            return redirect(url_for('auth.login'))
         return f(*args, **kwargs)
     return decorated_function
 
@@ -22,7 +22,7 @@ def admin_required(f):
     def decorated_function(*args, **kwargs):
         if 'user_id' not in session:
             flash('Por favor, faça login para acessar esta página.', 'error')
-            return redirect(url_for('auth.login', next=request.url))
+            return redirect(url_for('auth.login'))
         usuario = Usuario.query.get(session['user_id'])
         if usuario.Cargo != 'Administrador':
             flash('Acesso negado. Apenas administradores podem acessar esta página.', 'error')
@@ -36,7 +36,7 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         senha = request.form.get('password')
-        next_url = request.form.get('next') or url_for('main.home', _external=True)
+        next_url = request.form.get('next') or url_for('main.home')
         logger.debug(f"Tentativa de login para o email: {email}")
         
         usuario = Usuario.query.filter_by(Email=email).first()
@@ -48,7 +48,7 @@ def login():
             logger.warning(f"Falha no login para o email: {email}")
             return jsonify({'success': False, 'message': 'Credenciais inválidas. Por favor, tente novamente.'})
     
-    next_url = request.args.get('next', url_for('main.home', _external=True))
+    next_url = request.args.get('next', url_for('main.home'))
     return render_template('login.html', next=next_url)
 
 @auth.route('/logout')
