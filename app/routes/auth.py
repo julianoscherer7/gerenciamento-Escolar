@@ -1,11 +1,35 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, session
 from models import *
+from werkzeug.security import check_password_hash, generate_password_hash
 import logging
 from urllib.parse import urlparse, urljoin
 
 auth = Blueprint('auth', __name__)
 
 logger = logging.getLogger(__name__)
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            flash('Por favor, faça login para acessar esta página.', 'error')
+            return redirect(url_for('auth.login', next=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            flash('Por favor, faça login para acessar esta página.', 'error')
+            return redirect(url_for('auth.login', next=request.url))
+        usuario = Usuario.query.get(session['user_id'])
+        if usuario.Cargo != 'Administrador':
+            flash('Acesso negado. Apenas administradores podem acessar esta página.', 'error')
+            return redirect(url_for('main.home'))
+        return f(*args, **kwargs)
+    return decorated_function
+
 
 def is_safe_url(target):
     ref_url = urlparse(request.host_url)
@@ -51,7 +75,7 @@ def register_student():
             flash('Email já cadastrado.', 'error')
             return redirect(url_for('auth.register_student'))
         
-        novo_aluno = Usuario(Nome=nome, Cargo='Aluno', Email=email, Senha=senha)
+        novo_aluno = Usuario(Nome=nome, Cargo='Aluno', Email=email, Senha=generate_password_hash(senha))
         db.session.add(novo_aluno)
         db.session.commit()
         
