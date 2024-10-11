@@ -165,7 +165,7 @@
     <script>
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            fetch("{{ url_for('auth.login', _external=True) }}", {
+            fetch("{{ url_for('auth.login') }}", {
                 method: 'POST',
                 body: new FormData(this),
                 headers: {

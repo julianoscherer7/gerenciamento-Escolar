@@ -87,8 +87,8 @@ VALUES (1, '2024-10-05', 1, 1, 2, 'Professor');
 
 Inserção de salas:
 ```sql
-INSERT INTO `salas` (`ID_sala`, `Tipo`, `ID_andar`, `Capacidade`)
-VALUES (101, 'Laboratório', 1, 30);
+INSERT INTO `salas` (`ID_sala`, `Nome`, `Tipo`, `ID_andar`, `Capacidade`)
+VALUES (101, 'XXXX', 'Laboratório', 1, 30);
 ```
 
 ## Tabela `turmas`

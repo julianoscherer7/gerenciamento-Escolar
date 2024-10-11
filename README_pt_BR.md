@@ -1,5 +1,7 @@
 # Gerenciamento Escolar
 
+### [Leia em inglês também](https://github.com/gdbarros94/gerenciamento-Escolar/blob/main/README.md)
+
 ## Breve Descrição do Projeto
 O Gerenciamento Escolar é um sistema para facilitar a administração de escolas, oferecendo funcionalidades como o gerenciamento de alunos, turmas, professores e disciplinas, centralizando processos acadêmicos.
 
