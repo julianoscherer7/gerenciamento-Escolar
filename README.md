@@ -1,62 +1,59 @@
-# Gerenciamento Escolar
+# School Management
 
-## Breve Descrição do Projeto
-O Gerenciamento Escolar é um sistema para facilitar a administração de escolas, oferecendo funcionalidades como o gerenciamento de alunos, turmas, professores e disciplinas, centralizando processos acadêmicos.
+### [Read in Portuguese as well](https://github.com/gdbarros94/gerenciamento-Escolar/blob/main/README_pt_BR.md)
 
-## Descrição Completa do Projeto
-O sistema Gerenciamento Escolar foi desenvolvido para automatizar as principais tarefas de gestão escolar, desde o cadastro de alunos até o acompanhamento de seu desempenho acadêmico. Com uma interface simples, o sistema oferece módulos de gerenciamento de professores, disciplinas e turmas, além de relatórios que auxiliam os gestores a terem uma visão completa das atividades escolares. O projeto é construído em Python com Flask e integra um banco de dados para armazenar informações.
+## Brief Project Description
+The School Management is a system designed to facilitate school administration, offering features such as student, class, teacher, and subject management, centralizing academic processes.
 
-### Funcionalidades Principais:
-- **Cadastro de Alunos:** Gerencie informações detalhadas sobre os alunos.
-- **Gerenciamento de Professores e Disciplinas:** Adicione, edite e remova professores e suas disciplinas associadas.
-- **Controle de Turmas e Horários:** Organize as turmas e os horários das aulas.
-- **Relatórios de Desempenho:** Geração de relatórios sobre o desempenho dos alunos com base nas notas cadastradas.
+## Full Project Description
+The School Management system was developed to automate the main tasks of school management, from student registration to tracking their academic performance. With a simple interface, the system offers modules for managing teachers, subjects, and classes, as well as reports that help administrators gain a complete view of school activities. The project is built in Python with Flask and integrates a database to store information.
 
-## Manual de Uso (Casos de Uso)
-1. **Cadastro de Aluno:** Adicione um aluno com informações como nome, idade, turma e notas.
-2. **Gerenciamento de Professores:** Atribua disciplinas aos professores e controle suas atividades.
-3. **Relatórios Acadêmicos:** Acesse relatórios completos de desempenho dos alunos.
-4. **Organização de Horários:** Configure e gerencie os horários de aulas para diferentes turmas.
+### Key Features:
+- **Student Registration:** Manage detailed information about students.
+- **Teacher and Subject Management:** Add, edit, and remove teachers and their associated subjects.
+- **Class and Schedule Management:** Organize classes and lesson schedules.
+- **Performance Reports:** Generate reports on student performance based on registered grades.
 
-## Manual de Configuração e Uso
-### Passos para executar o projeto:
-1. **Clone o repositório**:
+## Usage Guide (Use Cases)
+1. **Student Registration:** Add a student with information such as name, age, class, and grades.
+2. **Teacher Management:** Assign subjects to teachers and manage their activities.
+3. **Academic Reports:** Access detailed student performance reports.
+4. **Schedule Management:** Configure and manage lesson schedules for different classes.
+
+## Configuration and Usage Guide
+### Steps to run the project:
+1. **Clone the repository**:
    ```bash
    git clone https://github.com/gdbarros94/gerenciamento-Escolar.git
 
-2. **Instale as dependências**:
+2. **Install the dependencies**:
    ```bash
    pip install -r requirements.txt
 
-3. **Configuração do banco de dados: Configure o banco de dados MySQL/PostgreSQL no arquivo de configuração.**
+3. **Set up the MySQL/PostgreSQL database in the configuration file.**
 
-4. **Inicie o servidor**
+4. **Start the server**
    ```bash
    python3 app/app.py
 
-## Requisitos do Sistema
+  ## System Requirements
 
-### Requisitos de Software:
-- **Linguagem:** Python 3.8 ou superior
+### Software Requirements:
+- **Language:** Python 3.8 or higher
 - **Framework:** Flask
-- **Banco de Dados:** MySQL ou PostgreSQL
+- **Database:** MySQL or PostgreSQL
 
-### Requisitos de Hardware:
-- **Processador:** Dual-core ou superior
-- **Memória RAM:** 2 GB ou mais
-- **Armazenamento:** 100 MB de espaço disponível no disco
+### Hardware Requirements:
+- **Processor:** Dual-core or higher
+- **RAM:** 2 GB or more
+- **Storage:** 100 MB of available disk space
 
-## Manual e Regras para Contribuição
+## Contribution Guidelines
 
-1. Faça um **fork** deste repositório.
-2. Crie uma nova branch para suas modificações:
+1. Fork this repository.
+2. Create a new branch for your modifications:
    ```bash
-   git checkout -b minha-nova-feature
+   git checkout -b my-new-feature
 
-## Contribuidores
-
-![GitHub contributors](https://img.shields.io/github/contributors/gdbarros94/gerenciamento-Escolar.svg)
-
-
-
-
+## Contributors
+  ![GitHub contributors](https://img.shields.io/github/contributors/gdbarros94/gerenciamento-Escolar.svg)

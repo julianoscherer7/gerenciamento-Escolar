@@ -72,6 +72,7 @@ class Andar(db.Model):
 class Sala(db.Model):
     __tablename__ = 'salas'
     ID_sala = db.Column(db.Integer, primary_key=True)
+    Nome = db.Column(db.String(100), nullable=False)
     Tipo = db.Column(db.String(50), nullable=False)
     ID_andar = db.Column(db.Integer, db.ForeignKey('andares.ID_andar'), nullable=False)
     Capacidade = db.Column(db.Integer, nullable=False)
