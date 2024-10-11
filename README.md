@@ -54,16 +54,9 @@ O sistema Gerenciamento Escolar foi desenvolvido para automatizar as principais 
    git checkout -b minha-nova-feature
 
 ## Contribuidores
-gdbarros94  
-luizGDpulz  
-joaoportolan93  
-VitorNoe  
-KerubinDev  
-jessicanobre  
-Gui0r  
-rrafaleao  
-elihotchillipeper  
-julianoscherer7
+
+![GitHub contributors](https://img.shields.io/github/contributors/gdbarros94/gerenciamento-Escolar.svg)
+
 
 
 
