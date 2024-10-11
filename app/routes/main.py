@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request, send_from_directory
 from models import *
-from .auth import login_required
+from .auth import login_required, admin_required
 
 main = Blueprint('main', __name__)
 
@@ -15,3 +15,4 @@ def home():
 @main.route('/static/img/<path:filename>')
 def serve_image(filename):
     return send_from_directory('templates/static/img', filename)
+

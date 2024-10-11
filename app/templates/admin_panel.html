@@ -330,27 +330,27 @@
                 // Lógica para os botões
                 document.getElementById('gerenciarUsuarios').addEventListener('click', function () {
                     // Redirecionar ou abrir modal para gerenciar usuários
-                    window.location.href = "{{ url_for('main.gerenciar_usuarios') }}";
+                    window.location.href = "{{ url_for('admin.gerenciar_usuarios') }}";
                 });
 
                 document.getElementById('gerenciarPrediosSalas').addEventListener('click', function () {
-                    window.location.href = "{{ url_for('main.gerenciar_predios_salas') }}";
+                    window.location.href = "{{ url_for('admin.gerenciar_predios_salas') }}";
                 });
 
                 document.getElementById('gerenciarTurmas').addEventListener('click', function () {
-                    window.location.href = "{{ url_for('main.gerenciar_turmas') }}";
+                    window.location.href = "{{ url_for('admin.gerenciar_turmas') }}";
                 });
 
                 document.getElementById('gerenciarRecursos').addEventListener('click', function () {
-                    window.location.href = "{{ url_for('main.gerenciar_recursos') }}";
+                    window.location.href = "{{ url_for('admin.gerenciar_recursos') }}";
                 });
 
                 document.getElementById('gerarRelatorios').addEventListener('click', function () {
-                    window.location.href = "{{ url_for('main.gerar_relatorios') }}";
+                    window.location.href = "{{ url_for('admin.gerar_relatorios') }}";
                 });
 
                 document.getElementById('configuracoesSistema').addEventListener('click', function () {
-                    window.location.href = "{{ url_for('main.configuracoes_sistema') }}";
+                    window.location.href = "{{ url_for('admin.configuracoes_sistema') }}";
                 });
             });
         </script>
