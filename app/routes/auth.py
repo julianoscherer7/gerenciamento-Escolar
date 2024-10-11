@@ -36,7 +36,7 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         senha = request.form.get('password')
-        next_url = request.form.get('next') or url_for('main.home')
+        next_url = request.form.get('next') or url_for('main.home', _external=True)
         logger.debug(f"Tentativa de login para o email: {email}")
         
         usuario = Usuario.query.filter_by(Email=email).first()
@@ -48,14 +48,14 @@ def login():
             logger.warning(f"Falha no login para o email: {email}")
             return jsonify({'success': False, 'message': 'Credenciais inválidas. Por favor, tente novamente.'})
     
-    next_url = request.args.get('next', url_for('main.home'))
+    next_url = request.args.get('next', url_for('main.home', _external=True))
     return render_template('login.html', next=next_url)
 
 @auth.route('/logout')
 def logout():
     session.pop('user_id', None)
     flash('Você foi desconectado.', 'info')
-    return redirect(url_for('main.home'))
+    return redirect(url_for('main.home', _external=True))
 
 @auth.route('/schedule', methods=['GET', 'POST'])
 def schedule():
@@ -78,7 +78,7 @@ def schedule():
         db.session.commit()
         
         flash('Aula agendada com sucesso!', 'success')
-        return redirect(url_for('main.home'))
+        return redirect(url_for('main.home', _external=True))
     
     salas = Sala.query.all()
     return render_template('schedule.html', salas=salas)
