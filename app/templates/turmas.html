@@ -1,0 +1,25 @@
+<!-- templates/cadastro_turmas.html -->
+{% extends "base.html" %}
+
+{% block title %}Cadastro de Turmas{% endblock %}
+
+{% block content %}
+<section class="form-section">
+    <h3>Cadastro de Turmas</h3>
+    <form method="POST" action="{{ url_for('main.registrar_turma') }}">
+        <div class="mb-3">
+            <label for="horarioInicio" class="form-label">Horário de Início</label>
+            <input type="time" class="form-control" id="horarioInicio" name="horarioInicio" required>
+        </div>
+        <div class="mb-3">
+            <label for="horarioFim" class="form-label">Horário de Fim</label>
+            <input type="time" class="form-control" id="horarioFim" name="horarioFim" required>
+        </div>
+        <div class="mb-3">
+            <label for="corTurma" class="form-label">Cor da Turma</label>
+            <input type="color" class="form-control form-control-color" id="corTurma" name="corTurma" value="#563d7c" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Registrar Turma</button>
+    </form>
+</section>
+{% endblock %}

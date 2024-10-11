@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Gerenciar Prédios, Salas & Andares{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" id="manageTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="predios-tab" data-bs-toggle="tab" data-bs-target="#predios" type="button" role="tab" aria-controls="predios" aria-selected="true">Prédios</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="salas-tab" data-bs-toggle="tab" data-bs-target="#salas" type="button" role="tab" aria-controls="salas" aria-selected="false">Salas</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="andares-tab" data-bs-toggle="tab" data-bs-target="#andares" type="button" role="tab" aria-controls="andares" aria-selected="false">Andares</button>
+        </li>
+    </ul>
+
+    <!-- Tab content -->
+    <div class="tab-content">
+        <!-- Prédios -->
+        <div class="tab-pane fade show active" id="predios" role="tabpanel" aria-labelledby="predios-tab">
+            <section class="form-section mt-4">
+                <h3>Cadastro de Prédios</h3>
+                <form method="POST" action="{{ url_for('registrar_predio') }}">
+                    <div class="mb-3">
+                        <label for="nomePredio" class="form-label">Nome do Prédio</label>
+                        <input type="text" class="form-control" id="nomePredio" name="nomePredio" placeholder="Digite o nome do prédio" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="andaresPredio" class="form-label">Número de Andares</label>
+                        <input type="number" class="form-control" id="andaresPredio" name="andaresPredio" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="corPredio" class="form-label">Cor do Prédio</label>
+                        <input type="color" class="form-control form-control-color" id="corPredio" name="corPredio" value="#563d7c" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Registrar Prédio</button>
+                </form>
+            </section>
+        </div>
+
+        <!-- Salas -->
+        <div class="tab-pane fade" id="salas" role="tabpanel" aria-labelledby="salas-tab">
+            <section class="form-section mt-4">
+                <h3>Cadastro de Salas</h3>
+                <form method="POST" action="{{ url_for('registrar_sala') }}">
+                    <div class="mb-3">
+                        <label for="nomeSala" class="form-label">Nome da Sala</label>
+                        <input type="text" class="form-control" id="nomeSala" name="nomeSala" placeholder="Digite o nome da sala" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="capacidadeSala" class="form-label">Capacidade</label>
+                        <input type="number" class="form-control" id="capacidadeSala" name="capacidadeSala" placeholder="Capacidade da sala" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tipoSala" class="form-label">Tipo da Sala</label>
+                        <input type="text" class="form-control" id="tipoSala" name="tipoSala" placeholder="Digite o tipo da sala" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="corSala" class="form-label">Cor de Destaque</label>
+                        <input type="color" class="form-control form-control-color" id="corSala" name="corSala" value="#563d7c" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Registrar Sala</button>
+                </form>
+            </section>
+        </div>
+
+        <!-- Andares -->
+        <div class="tab-pane fade" id="andares" role="tabpanel" aria-labelledby="andares-tab">
+            <section class="form-section mt-4">
+                <h3>Cadastro de Andares</h3>
+                <form method="POST" action="{{ url_for('registrar_andar') }}">
+                    <div class="mb-3">
+                        <label for="numeroAndar" class="form-label">Número do Andar</label>
+                        <input type="number" class="form-control" id="numeroAndar" name="numeroAndar" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="predioAndar" class="form-label">Prédio</label>
+                        <select class="form-control" id="predioAndar" name="predioAndar" required>
+                            <option value="">Selecione um prédio</option>
+                            {% for predio in predios %}
+                                <option value="{{ predio.id }}">{{ predio.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="corAndar" class="form-label">Cor do Andar</label>
+                        <input type="color" class="form-control form-control-color" id="corAndar" name="corAndar" value="#563d7c" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Registrar Andar</button>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Atualizar a lista de prédios no formulário de Andares quando a aba for ativada
+    document.addEventListener('DOMContentLoaded', () => {
+        const manageTabs = new bootstrap.Tab(document.querySelector('#manageTabs a[href="#andares"]'));
+        document.querySelector('#manageTabs a[href="#andares"]').addEventListener('shown.bs.tab', () => {
+            // Opcional: Atualizar a lista de prédios via AJAX se necessário
+        });
+    });
+</script>
+{% endblock %}
