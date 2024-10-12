@@ -30,7 +30,7 @@
             left: 0;
         }
 
-        #sidebar.active {
+        #sidebar.hidden {
             margin-left: -250px;
         }
 
@@ -60,17 +60,18 @@
             right: 0;
         }
 
-        #content.active {
+        #content.fullscreen {
             width: 100%;
+            padding: 0;
         }
 
         /* Toggle Button */
-        #sidebarCollapse {
+        #fullscreenToggle {
             background: #34495E;
             color: #fff;
             border: none;
             position: fixed;
-            left: 10px;
+            right: 10px;
             top: 10px;
             z-index: 1001;
         }
@@ -79,7 +80,11 @@
         .navbar {
             padding: 0.5rem 1rem;
             background-color: #f8f9fa;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
+        }
+
+        .navbar.hidden {
+            transform: translateY(-100%);
         }
 
         /* Responsive Adjustments */
@@ -88,17 +93,8 @@
                 margin-left: -250px;
             }
 
-            #sidebar.active {
-                margin-left: 0;
-            }
-
             #content {
                 width: 100%;
-            }
-
-            #content.active {
-                margin-left: 250px;
-                width: calc(100% - 250px);
             }
         }
 
@@ -148,9 +144,6 @@
             color: #fff;
         }
     </style>
-
-    <!-- Inclusão da Biblioteca Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="wrapper">
@@ -210,12 +203,10 @@
             <!-- Navbar Superior -->
             <nav class="navbar navbar-expand-lg mb-4">
                 <div class="container-fluid">
-                    <button type="button" id="sidebarCollapse" class="btn">
-                        <i class="fas fa-bars"></i>
-                    </button>
                     <a class="navbar-brand me-auto" href="#">Agendamentos - Hoje</a>
                     <div class="d-flex align-items-center">
                         <i class="fas fa-moon me-3" id="theme-switch" style="cursor: pointer;"></i>
+                        {% if current_user is defined and current_user.is_authenticated %}
                         <div class="dropdown">
                             <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="userMenu"
                                 data-bs-toggle="dropdown" aria-expanded="false">
@@ -226,9 +217,17 @@
                                 <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Sair</a></li>
                             </ul>
                         </div>
+                        {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary">Entrar</a>
+                        {% endif %}
                     </div>
                 </div>
             </nav>
+
+            <!-- Botão de Tela Cheia -->
+            <button type="button" id="fullscreenToggle" class="btn">
+                <i class="fas fa-expand"></i>
+            </button>
 
             <!-- Conteúdo Principal -->
             <div class="main-content">
@@ -244,48 +243,25 @@
     <!-- JavaScript Inline -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Sidebar toggle
             const sidebar = document.getElementById('sidebar');
             const content = document.getElementById('content');
-            const sidebarCollapse = document.getElementById('sidebarCollapse');
+            const navbar = document.querySelector('.navbar');
+            const fullscreenToggle = document.getElementById('fullscreenToggle');
+            const themeSwitch = document.getElementById('theme-switch');
 
-            sidebarCollapse.addEventListener('click', () => {
-                sidebar.classList.toggle('active');
-                content.classList.toggle('active');
+            // Alternar modo tela cheia
+            fullscreenToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('hidden');
+                content.classList.toggle('fullscreen');
+                navbar.classList.toggle('hidden');
+                fullscreenToggle.querySelector('i').classList.toggle('fa-expand');
+                fullscreenToggle.querySelector('i').classList.toggle('fa-compress');
             });
 
             // Alternar entre modos claro e escuro
-            const themeSwitch = document.getElementById('theme-switch');
             themeSwitch.addEventListener('click', () => {
                 document.body.classList.toggle('dark-mode');
             });
-
-            // Lógica para o gráfico (se necessário)
-            const canvas = document.getElementById('agendamentoChart');
-            if (canvas) {
-                const ctx = canvas.getContext('2d');
-                const agendamentoChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Dom.', 'Seg.', 'Ter.', 'Qua.', 'Qui.', 'Sex.', 'Sáb.'],
-                        datasets: [{
-                            label: 'Taxa de Agendamentos',
-                            data: [10, 20, 30, 40, 50, 30, 10],
-                            backgroundColor: '#3498db',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        },
-                        responsive: true,
-                        maintainAspectRatio: false
-                    }
-                });
-            }
         });
     </script>
 </body>
