@@ -216,6 +216,7 @@
                     <a class="navbar-brand me-auto" href="#">Agendamentos - Hoje</a>
                     <div class="d-flex align-items-center">
                         <i class="fas fa-moon me-3" id="theme-switch" style="cursor: pointer;"></i>
+                        {% if current_user is defined and current_user.is_authenticated %}
                         <div class="dropdown">
                             <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="userMenu"
                                 data-bs-toggle="dropdown" aria-expanded="false">
@@ -226,6 +227,9 @@
                                 <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Sair</a></li>
                             </ul>
                         </div>
+                        {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary">Entrar</a>
+                        {% endif %}
                     </div>
                 </div>
             </nav>
