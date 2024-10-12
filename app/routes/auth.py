@@ -34,19 +34,23 @@ def admin_required(f):
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form.get('email')
-        senha = request.form.get('password')
-        next_url = request.form.get('next') or url_for('main.home')
-        logger.debug(f"Tentativa de login para o email: {email}")
-        
-        usuario = Usuario.query.filter_by(Email=email).first()
-        if usuario and usuario.Senha == senha:  # Comparação direta da senha
-            session['user_id'] = usuario.ID_usuario
-            logger.info(f"Login bem-sucedido para o usuário: {usuario.Nome}")
-            return jsonify({'success': True, 'redirect': next_url})
-        else:
-            logger.warning(f"Falha no login para o email: {email}")
-            return jsonify({'success': False, 'message': 'Credenciais inválidas. Por favor, tente novamente.'})
+        try:
+            email = request.form.get('email')
+            senha = request.form.get('password')
+            next_url = request.form.get('next') or url_for('main.home')
+            logger.debug(f"Tentativa de login para o email: {email}")
+            
+            usuario = Usuario.query.filter_by(Email=email).first()
+            if usuario and usuario.Senha == senha:
+                session['user_id'] = usuario.ID_usuario
+                logger.info(f"Login bem-sucedido para o usuário: {usuario.Nome}")
+                return jsonify({'success': True, 'redirect': next_url})
+            else:
+                logger.warning(f"Falha no login para o email: {email}")
+                return jsonify({'success': False, 'message': 'Credenciais inválidas. Por favor, tente novamente.'})
+        except Exception as e:
+            logger.error(f"Erro durante o login: {str(e)}")
+            return jsonify({'success': False, 'message': 'Ocorreu um erro durante o login. Por favor, tente novamente mais tarde.'}), 500
     
     next_url = request.args.get('next', url_for('main.home'))
     return render_template('login.html', next=next_url)
@@ -78,7 +82,7 @@ def schedule():
         db.session.commit()
         
         flash('Aula agendada com sucesso!', 'success')
-        return redirect(url_for('main.home', _external=True))
+        return redirect(url_for('main.home'))
     
     salas = Sala.query.all()
     return render_template('schedule.html', salas=salas)

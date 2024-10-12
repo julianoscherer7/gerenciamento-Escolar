@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, session, request, send_from_directory
 from models import *
 from .auth import login_required, admin_required
+import hashlib
 
 admin = Blueprint('admin', __name__)
 
@@ -20,7 +21,10 @@ def gerenciar_usuarios():
         email = request.form['emailUsuario']
         senha = request.form['senhaUsuario']
         
-        novo_usuario = Usuario(Nome=nome_usuario, Cargo=cargo, Email=email, Senha=senha)
+        # Gera o hash MD5 da senha
+        senha_hash = hashlib.md5(senha.encode()).hexdigest()
+        
+        novo_usuario = Usuario(Nome=nome_usuario, Cargo=cargo, Email=email, Senha=senha_hash)
         db.session.add(novo_usuario)
         db.session.commit()
         
@@ -28,7 +32,7 @@ def gerenciar_usuarios():
         return redirect(url_for('admin.gerenciar_usuarios'))
     
     usuarios = Usuario.query.all()
-    return render_template('gerenciar_usuarios.html', usuarios=usuarios)
+    return render_template('user_register.html', usuarios=usuarios)
 
 @admin.route('/admin/gerenciar-predios-salas', methods=['GET', 'POST'])
 @login_required
