@@ -41,7 +41,7 @@ def login():
             logger.debug(f"Tentativa de login para o email: {email}")
             
             usuario = Usuario.query.filter_by(Email=email).first()
-            if usuario and usuario.Senha == senha:
+            if usuario and usuario.check_senha(senha):
                 session['user_id'] = usuario.ID_usuario
                 logger.info(f"Login bem-sucedido para o usuário: {usuario.Nome}")
                 return jsonify({'success': True, 'redirect': next_url})
