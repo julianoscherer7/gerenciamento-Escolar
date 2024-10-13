@@ -21,17 +21,12 @@ def gerenciar_usuarios():
         email = request.form['emailUsuario']
         senha = request.form['senhaUsuario']
         
-        # Gera o hash MD5 da senha
-        senha_hash = hashlib.md5(senha.encode()).hexdigest()
-        
-        novo_usuario = Usuario(Nome=nome_usuario, Cargo=cargo, Email=email, Senha=senha_hash)
-        db.session.add(novo_usuario)
-        db.session.commit()
+        novo_usuario = Usuario.criar_usuario(nome_usuario, cargo, email, senha)
         
         flash('Usuário registrado com sucesso!', 'success')
         return redirect(url_for('admin.gerenciar_usuarios'))
     
-    usuarios = Usuario.query.all()
+    usuarios = Usuario.listar_usuarios()
     return render_template('user_register.html', usuarios=usuarios)
 
 @admin.route('/admin/gerenciar-predios-salas', methods=['GET', 'POST'])
