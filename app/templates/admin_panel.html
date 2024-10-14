@@ -162,37 +162,37 @@
             </div>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link active" href="{{ url_for('main.home') }}">
+                    <a class="nav-link active" href="{{ url_for('main.home') }}"> 
                         <i class="fas fa-tachometer-alt me-2"></i> Dashboard
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="gerenciarUsuarios">
+                    <a class="nav-link" href="{{ url_for('admin.manage_users') }}" id="gerenciarUsuarios">
                         <i class="fas fa-users me-2"></i> Gerenciar Usuários
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="gerenciarPrediosSalas">
+                    <a class="nav-link" href="{{ url_for('admin.manage_buildings') }}" id="gerenciarPrediosSalas">
                         <i class="fas fa-building me-2"></i> Prédios e Salas
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="gerenciarTurmas">
+                    <a class="nav-link" href="{{ url_for('admin.manage_classrooms') }}" id="gerenciarTurmas">
                         <i class="fas fa-chalkboard-teacher me-2"></i> Gerenciar Turmas
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="gerenciarRecursos">
+                    <a class="nav-link" href="{{ url_for('admin.manage_resources') }}" id="gerenciarRecursos">
                         <i class="fas fa-cogs me-2"></i> Gerenciar Recursos
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="gerarRelatorios">
+                    <a class="nav-link" href="{{ url_for('admin.reports') }}" id="gerarRelatorios">
                         <i class="fas fa-chart-line me-2"></i> Relatórios
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="configuracoesSistema">
+                    <a class="nav-link" href="{{ url_for('admin.systen_config') }}" id="configuracoesSistema">
                         <i class="fas fa-sliders-h me-2"></i> Configurações
                     </a>
                 </li>
@@ -252,7 +252,7 @@
                                 </div>
                                 <h5 class="card-title">Prédios e Salas</h5>
                                 <p class="card-text">Gerencie a estrutura física da instituição.</p>
-                                <a href="./infraestrutura.html" class="btn btn-light mt-auto" id="gerenciarPrediosSalas">Acessar</a>
+                                <a href="{{ url_for('admin.manage_buildings') }}" class="btn btn-light mt-auto" id="gerenciarPrediosSalas">Acessar</a>
                             </div>
                         </div>
                     </div>
@@ -330,27 +330,27 @@
                 // Lógica para os botões
                 document.getElementById('gerenciarUsuarios').addEventListener('click', function () {
                     // Redirecionar ou abrir modal para gerenciar usuários
-                    window.location.href = "{{ url_for('admin.gerenciar_usuarios') }}";
+                    window.location.href = "{{ url_for('admin.manage_users') }}";
                 });
 
                 document.getElementById('gerenciarPrediosSalas').addEventListener('click', function () {
-                    window.location.href = "{{ url_for('admin.gerenciar_predios_salas') }}";
+                    window.location.href = "{{ url_for('admin.manage_buildings') }}";
                 });
 
                 document.getElementById('gerenciarTurmas').addEventListener('click', function () {
-                    window.location.href = "{{ url_for('admin.gerenciar_turmas') }}";
+                    window.location.href = "{{ url_for('admin.manage_classrooms') }}";
                 });
 
                 document.getElementById('gerenciarRecursos').addEventListener('click', function () {
-                    window.location.href = "{{ url_for('admin.gerenciar_recursos') }}";
+                    window.location.href = "{{ url_for('admin.manage_resources') }}";
                 });
 
                 document.getElementById('gerarRelatorios').addEventListener('click', function () {
-                    window.location.href = "{{ url_for('admin.gerar_relatorios') }}";
+                    window.location.href = "{{ url_for('admin.reports') }}";
                 });
 
                 document.getElementById('configuracoesSistema').addEventListener('click', function () {
-                    window.location.href = "{{ url_for('admin.configuracoes_sistema') }}";
+                    window.location.href = "{{ url_for('admin.systen_config') }}";
                 });
             });
         </script>
