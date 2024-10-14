@@ -298,7 +298,7 @@
         <div class="tab-pane fade" id="cadastro_usuarios">
             <section class="form-section">
                 <h2 class="text-center mb-4">Cadastro de Usuários</h2>
-                <form>
+                <form method="POST" action="{{ url_for('admin.manage_users') }}">
                     <div class="mb-3">
                         <label for="nomeUsuario" class="form-label">Nome</label>
                         <input type="text" class="form-control" id="nomeUsuario" placeholder="Insira o nome do usuário" required>
