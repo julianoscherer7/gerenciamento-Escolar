@@ -11,23 +11,60 @@ def admin_panel():
     usuario = Usuario.query.get(session['user_id'])
     return render_template('admin_panel.html', usuario=usuario)
 
-@admin.route('/admin/gerenciar-usuarios', methods=['GET', 'POST'])
+# Rotas de Gerenciamento de Usuários
+
+@admin.route('/admin/manage-users', methods=['GET', 'POST'])
 @login_required
 @admin_required
-def gerenciar_usuarios():
+def manage_users():
+    usuarios = Usuario.listar_usuarios()  # Listar todos os usuários para exibir no formulário
     if request.method == 'POST':
-        nome_usuario = request.form['nomeUsuario']
-        cargo = request.form['cargoUsuario']
-        email = request.form['emailUsuario']
-        senha = request.form['senhaUsuario']
-        
-        novo_usuario = Usuario.criar_usuario(nome_usuario, cargo, email, senha)
-        
-        flash('Usuário registrado com sucesso!', 'success')
-        return redirect(url_for('admin.gerenciar_usuarios'))
-    
-    usuarios = Usuario.listar_usuarios()
-    return render_template('user_register.html', usuarios=usuarios)
+        if 'novoUsuario' in request.form:  # Identificar se é criação de usuário
+            nome_usuario = request.form['nomeUsuario']
+            cargo = request.form['cargoUsuario']
+            email = request.form['emailUsuario']
+            senha = request.form['senhaUsuario']
+
+            novo_usuario = Usuario.criar_usuario(nome_usuario, cargo, email, senha)
+
+            flash('Usuário registrado com sucesso!', 'success')
+        elif 'editarUsuario' in request.form:  # Identificar se é edição de usuário
+            id_usuario = request.form['idUsuario']
+            nome_usuario = request.form['nomeUsuario']
+            cargo = request.form['cargoUsuario']
+            email = request.form['emailUsuario']
+            senha = request.form['senhaUsuario']
+
+            usuario = Usuario.query.get(id_usuario)
+            if usuario:
+                usuario.Nome = nome_usuario
+                usuario.Cargo = cargo
+                usuario.Email = email
+                if senha:
+                    usuario.set_senha(senha)  # Atualizar a senha se fornecida
+                db.session.commit()
+
+                flash('Usuário atualizado com sucesso!', 'success')
+            else:
+                flash('Usuário não encontrado.', 'danger')
+
+        return redirect(url_for('admin.manage_users'))
+
+    return render_template('configuracao_super_admin.html', usuarios=usuarios)
+
+@admin.route('/admin/delete-user/<int:id>', methods=['POST'])
+@login_required
+@admin_required
+def delete_user(id):
+    usuario = Usuario.query.get(id)
+    if usuario:
+        db.session.delete(usuario)
+        db.session.commit()
+        flash('Usuário removido com sucesso!', 'success')
+    else:
+        flash('Usuário não encontrado.', 'danger')
+    return redirect(url_for('admin.manage_users'))
+
 
 @admin.route('/admin/gerenciar-predios-salas', methods=['GET', 'POST'])
 @login_required
