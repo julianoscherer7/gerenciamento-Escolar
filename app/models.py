@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
 # Instância do SQLAlchemy
@@ -15,9 +16,16 @@ class Usuario(db.Model):
     def __repr__(self):
         return f'<Usuario {self.Nome}>'
 
+    def set_senha(self, senha):
+        self.Senha = generate_password_hash(senha)
+
+    def check_senha(self, senha):
+        return check_password_hash(self.Senha, senha)
+
     @classmethod
     def criar_usuario(cls, nome, cargo, email, senha):
-        novo_usuario = cls(Nome=nome, Cargo=cargo, Email=email, Senha=senha)
+        novo_usuario = cls(Nome=nome, Cargo=cargo, Email=email)
+        novo_usuario.set_senha(senha)
         db.session.add(novo_usuario)
         db.session.commit()
         return novo_usuario
