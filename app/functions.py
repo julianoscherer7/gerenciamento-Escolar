@@ -16,7 +16,7 @@ def turno_atual(return_int=False):
 turno_atual()
 
 
-"""sugestao para a classe agendamentos, implementando funções extra que serão necessarias """"
+"""sugestao para a classe agendamentos, implementando funções extra que serão necessarias """
 
 
 """
