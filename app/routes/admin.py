@@ -11,10 +11,10 @@ def admin_panel():
     usuario = Usuario.query.get(session['user_id'])
     return render_template('admin_panel.html', usuario=usuario)
 
-@admin.route('/admin/gerenciar-usuarios', methods=['GET', 'POST'])
+@admin.route('/admin/manage_users', methods=['GET', 'POST'])
 @login_required
 @admin_required
-def gerenciar_usuarios():
+def manage_users():
     if request.method == 'POST':
         nome_usuario = request.form['nomeUsuario']
         cargo = request.form['cargoUsuario']
@@ -24,15 +24,15 @@ def gerenciar_usuarios():
         novo_usuario = Usuario.criar_usuario(nome_usuario, cargo, email, senha)
         
         flash('Usuário registrado com sucesso!', 'success')
-        return redirect(url_for('admin.gerenciar_usuarios'))
+        return redirect(url_for('admin.users_config'))
     
     usuarios = Usuario.listar_usuarios()
-    return render_template('user_register.html', usuarios=usuarios)
+    return render_template('users_config.html', usuarios=usuarios)
 
-@admin.route('/admin/gerenciar-predios-salas', methods=['GET', 'POST'])
+@admin.route('/admin/manage-buildings', methods=['GET', 'POST'])
 @login_required
 @admin_required
-def gerenciar_predios_salas():
+def manage_buildings():
     if request.method == 'POST':
         if 'cadastro_salas' in request.form:
             nome_sala = request.form['nomeSala']
@@ -68,16 +68,16 @@ def gerenciar_predios_salas():
             
             flash('Andar registrado com sucesso!', 'success')
         
-        return redirect(url_for('admin.gerenciar_predios_salas'))
+        return redirect(url_for('admin.manage_buildings'))
     
     predios = Predio.query.all()
     salas = Sala.query.all()
-    return render_template('gerenciar_predios_salas.html', predios=predios, salas=salas)
+    return render_template('infrastructure.html', predios=predios, salas=salas)
 
-@admin.route('/admin/gerenciar-turmas', methods=['GET', 'POST'])
+@admin.route('/admin/manage-classrooms', methods=['GET', 'POST'])
 @login_required
 @admin_required
-def gerenciar_turmas():
+def manage_classrooms():
     if request.method == 'POST':
         horario_inicio = request.form['horarioInicio']
         horario_fim = request.form['horarioFim']
@@ -93,10 +93,10 @@ def gerenciar_turmas():
     turmas = Turma.query.all()
     return render_template('gerenciar_turmas.html', turmas=turmas)
 
-@admin.route('/admin/gerenciar-recursos', methods=['GET', 'POST'])
+@admin.route('/admin/manage_resources', methods=['GET', 'POST'])
 @login_required
 @admin_required
-def gerenciar_recursos():
+def manage_resources():
     if request.method == 'POST':
         quantidade = request.form['quantidadeRecurso']
         identificacao = request.form['identificacaoRecurso']
@@ -112,35 +112,35 @@ def gerenciar_recursos():
     recursos = Recurso.query.all()
     return render_template('gerenciar_recursos.html', recursos=recursos)
 
-@admin.route('/admin/gerenciar-professores', methods=['GET', 'POST'])
-@login_required
-@admin_required
-def gerenciar_professores():
-    if request.method == 'POST':
-        nome_professor = request.form['nomeProfessor']
-        area = request.form['areaProfessor']
-        carga_horaria = request.form['cargaHoraria']
-        tipo_contrato = request.form['tipoContrato']
-        disponibilidade = request.form['disponibilidade']
+# @admin.route('/admin/gerenciar-professores', methods=['GET', 'POST'])
+# @login_required
+# @admin_required
+# def gerenciar_professores():
+#     if request.method == 'POST':
+#         nome_professor = request.form['nomeProfessor']
+#         area = request.form['areaProfessor']
+#         carga_horaria = request.form['cargaHoraria']
+#         tipo_contrato = request.form['tipoContrato']
+#         disponibilidade = request.form['disponibilidade']
         
-        novo_professor = Professor(Nome=nome_professor, Area=area, CargaHoraria=carga_horaria, TipoContrato=tipo_contrato, Disponibilidade=disponibilidade)
-        db.session.add(novo_professor)
-        db.session.commit()
+#         novo_professor = Professor(Nome=nome_professor, Area=area, CargaHoraria=carga_horaria, TipoContrato=tipo_contrato, Disponibilidade=disponibilidade)
+#         db.session.add(novo_professor)
+#         db.session.commit()
         
-        flash('Professor registrado com sucesso!', 'success')
-        return redirect(url_for('admin.gerenciar_professores'))
+#         flash('Professor registrado com sucesso!', 'success')
+#         return redirect(url_for('admin.gerenciar_professores'))
     
-    professores = Professor.query.all()
-    return render_template('gerenciar_professores.html', professores=professores)
+#     professores = Professor.query.all()
+#     return render_template('gerenciar_professores.html', professores=professores)
 
-@admin.route('/admin/gerar-relatorios')
+@admin.route('/admin/reports')
 @login_required
 @admin_required
-def gerar_relatorios():
+def reports():
     return render_template('gerar_relatorios.html')
 
-@admin.route('/admin/configuracoes-sistema')
+@admin.route('/admin/systen-config')
 @login_required
 @admin_required
-def configuracoes_sistema():
-    return render_template('configuracoes_sistema.html')
+def systen_config():
+    return render_template('admin_config.html')

@@ -8,26 +8,17 @@
         <!-- Título "Agendamentos recentes" -->
         <h2>Agendamentos Recentes</h2>
 
-        <!-- Cartões de agendamentos -->
         <div class="agendamentos">
+            {% for agendamento in agendamentos %}
             <div class="agendamento-card">
-                <p><strong>Turma X</strong></p>
-                <p>Sala Y</p>
-                <p>Horário: xx:yy</p>
+                <p><strong>{{ agendamento.turma }}</strong></p>
+                <p>Sala Agendada: {{ agendamento.sala }}</p>
+                <p>Horário: {{ agendamento.horario_inicio }} - {{ agendamento.horario_fim }}</p>
             </div>
-            <div class="agendamento-card">
-                <p><strong>Turma Y</strong></p>
-                <p>Sala Z</p>
-                <p>Horário: yy:xx</p>
-            </div>
-            <div class="agendamento-card">
-                <p><strong>Turma Z</strong></p>
-                <p>Sala A</p>
-                <p>Horário: zz:xx</p>
-            </div>
-            <!-- Adicione mais agendamento-card se necessário -->
+            {% else %}
+            <p>Nenhum agendamento encontrado.</p>
+            {% endfor %}
         </div>
-    </div>
 
     <style>
         body {
