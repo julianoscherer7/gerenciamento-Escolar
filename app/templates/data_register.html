@@ -131,9 +131,6 @@
             <a class="nav-link active" data-bs-toggle="tab" href="#cadastro_salas">Cadastro de Salas</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" href="#cadastro_turmas">Cadastro de Turmas</a>
-        </li>
-        <li class="nav-item">
             <a class="nav-link" data-bs-toggle="tab" href="#cadastro_predios">Cadastro de Prédios</a>
         </li>
         <li class="nav-item">
@@ -168,29 +165,6 @@
                 </form>
             </section>
         </div>
-
-        <!-- Cadastro de Turmas -->
-        <div class="tab-pane container fade" id="cadastro_turmas">
-            <section class="form-section">
-                <h3>Cadastro de Turmas</h3>
-                <form>
-                    <div class="mb-3">
-                        <label for="horarioInicio" class="form-label">Horário de Início</label>
-                        <input type="time" class="form-control" id="horarioInicio" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="horarioFim" class="form-label">Horário de Fim</label>
-                        <input type="time" class="form-control" id="horarioFim" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="corTurma" class="form-label">Cor da Turma</label>
-                        <input type="color" class="form-control form-control-color" id="corTurma" value="#563d7c" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Registrar Turma</button>
-                </form>
-            </section>
-        </div>
-
         <!-- Cadastro de Prédios -->
         <div class="tab-pane container fade" id="cadastro_predios">
             <section class="form-section">
@@ -207,6 +181,10 @@
                     <div class="mb-3">
                         <label for="corPredio" class="form-label">Cor do Prédio</label>
                         <input type="color" class="form-control form-control-color" id="corPredio" value="#563d7c" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="enderecoPredio" class="form-label">Endereço</label>
+                        <input type="text" class="form-control" id="enderecoPredio" placeholder="Digite o endereço do prédio" required>
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Registrar Prédio</button>
                 </form>
@@ -253,10 +231,9 @@
             const now = new Date();
             const timeString = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
             const dateString = now.toLocaleDateString('pt-BR');
-            document.getElementById('footer-time').textContent = Data: ${dateString} | Hora: ${timeString};
+            document.getElementById('footer-time').textContent = `${dateString} - ${timeString}`;
         }
-
-        setInterval(updateTime, 1000); // Atualiza a cada segundo
+        setInterval(updateTime, 1000);
         updateTime();
     </script>
 </body>
