@@ -180,4 +180,4 @@ def reports():
 @login_required
 @admin_required
 def systen_config():
-    return render_template('configuracoes_sistema.html')
+    return render_template('admin_config.html')
