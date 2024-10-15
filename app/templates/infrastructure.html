@@ -23,7 +23,8 @@
         <div class="tab-pane fade show active" id="predios" role="tabpanel" aria-labelledby="predios-tab">
             <section class="form-section mt-4">
                 <h3>Cadastro de Prédios</h3>
-                <form method="POST" action="{{ url_for('registrar_predio') }}">
+                <form method="POST" action="{{ url_for('admin.manage_buildings') }}">
+                    <input type="hidden" name="cadastro_predios" value="1">
                     <div class="mb-3">
                         <label for="nomePredio" class="form-label">Nome do Prédio</label>
                         <input type="text" class="form-control" id="nomePredio" name="nomePredio" placeholder="Digite o nome do prédio" required>
@@ -45,7 +46,8 @@
         <div class="tab-pane fade" id="salas" role="tabpanel" aria-labelledby="salas-tab">
             <section class="form-section mt-4">
                 <h3>Cadastro de Salas</h3>
-                <form method="POST" action="{{ url_for('registrar_sala') }}">
+                <form method="POST" action="{{ url_for('admin.manage_buildings') }}">
+                    <input type="hidden" name="cadastro_salas" value="1">
                     <div class="mb-3">
                         <label for="nomeSala" class="form-label">Nome da Sala</label>
                         <input type="text" class="form-control" id="nomeSala" name="nomeSala" placeholder="Digite o nome da sala" required>
@@ -71,7 +73,8 @@
         <div class="tab-pane fade" id="andares" role="tabpanel" aria-labelledby="andares-tab">
             <section class="form-section mt-4">
                 <h3>Cadastro de Andares</h3>
-                <form method="POST" action="{{ url_for('registrar_andar') }}">
+                <form method="POST" action="{{ url_for('admin.manage_buildings') }}">
+                    <input type="hidden" name="cadastro_andares" value="1">
                     <div class="mb-3">
                         <label for="numeroAndar" class="form-label">Número do Andar</label>
                         <input type="number" class="form-control" id="numeroAndar" name="numeroAndar" required>

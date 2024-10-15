@@ -8,32 +8,17 @@
         <!-- Título "Agendamentos recentes" -->
         <h2>Agendamentos Recentes</h2>
 
-        <!-- Cartões de agendamentos -->
         <div class="agendamentos">
+            {% for agendamento in agendamentos %}
             <div class="agendamento-card">
-                <p><strong>Turma X</strong></p>
-                <p>Sala Y</p>
-                <p>Horário: xx:yy</p>
+                <p><strong>{{ agendamento.turma }}</strong></p>
+                <p>Sala Agendada: {{ agendamento.sala }}</p>
+                <p>Horário: {{ agendamento.horario_inicio }} - {{ agendamento.horario_fim }}</p>
             </div>
-            <div class="agendamento-card">
-                <p><strong>Turma Y</strong></p>
-                <p>Sala Z</p>
-                <p>Horário: yy:xx</p>
-            </div>
-            <div class="agendamento-card">
-                <p><strong>Turma Z</strong></p>
-                <p>Sala A</p>
-                <p>Horário: zz:xx</p>
-            </div>
-            <!-- Adicione mais agendamento-card se necessário -->
+            {% else %}
+            <p>Nenhum agendamento encontrado.</p>
+            {% endfor %}
         </div>
-
-        <!-- Gráfico de agendamentos -->
-        <div class="chart-container">
-            <h2>Taxa de Agendamentos</h2>
-            <canvas id="agendamentoChart"></canvas>
-        </div>
-    </div>
 
     <style>
         body {
@@ -71,39 +56,5 @@
         .agendamento-card:hover {
             transform: scale(1.05); /* Aumenta o cartão ao passar o mouse */
         }
-
-        /* Define um tamanho fixo ou flexível para o contêiner do gráfico */
-        .chart-container {
-            width: 85%; /* Tamanho responsivo relativo ao tamanho da página */
-            max-width: 1150px; /* Limita o tamanho máximo */
-            height: 550px; /* Altura fixa */
-            margin: 20px auto; /* Centraliza o gráfico */
-        }
     </style>
-
-    <script>
-        // Configuração do gráfico de barras usando Chart.js
-        const ctx = document.getElementById('agendamentoChart').getContext('2d');
-        const agendamentoChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Dom.', 'Seg.', 'Ter.', 'Qua.', 'Qui.', 'Sex.', 'Sáb.'],
-                datasets: [{
-                    label: 'Taxa de Agendamentos',
-                    data: [10, 20, 30, 40, 50, 30, 10],
-                    backgroundColor: '#3498db',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                },
-                responsive: true,
-                maintainAspectRatio: false // Permite que o gráfico se ajuste ao tamanho do contêiner
-            }
-        });
-    </script>
 {% endblock %}

@@ -10,7 +10,23 @@ def index():
 
 @main.route('/home')
 def home():
-    return render_template('home.html')
+    # Buscar todos os agendamentos do banco de dados
+    agendamentos = Agendamento.query.all()
+
+    # Para cada agendamento, também buscar a turma associada para exibir detalhes
+    agendamentos_completos = []
+    for agendamento in agendamentos:
+        turma = Turma.query.get(agendamento.ID_turma)  # Supondo que há uma chave estrangeira de Turma
+        sala = Sala.query.get(agendamento.ID_turma)
+        agendamentos_completos.append({
+            'turma': turma.Curso if turma else 'Turma desconhecida',
+            'sala': sala.Nome,  # Você precisará alterar para buscar a sala também se necessário
+            'horario_inicio': agendamento.TimeStamp_inicio.strftime('%H:%M'),
+            'horario_fim': agendamento.TimeStamp_fim.strftime('%H:%M')
+        })
+
+    # Renderizar o template e passar os dados dos agendamentos
+    return render_template('home.html', agendamentos=agendamentos_completos)
 
 @main.route('/static/img/<path:filename>')
 def serve_image(filename):
