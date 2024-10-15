@@ -50,7 +50,7 @@ def manage_users():
 
         return redirect(url_for('admin.manage_users'))
 
-    return render_template('configuracao_super_admin.html', usuarios=usuarios)
+    return render_template('templateDeGerenciarUserDoRafael.html', usuarios=usuarios)
 
 @admin.route('/admin/delete-user/<int:id>', methods=['POST'])
 @login_required
