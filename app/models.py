@@ -90,8 +90,8 @@ class Sala(db.Model):
         return f'<Sala {self.ID_sala} do Andar {self.ID_andar}>'
 
     @classmethod
-    def criar_sala(cls, tipo, id_andar, capacidade):
-        nova_sala = cls(Tipo=tipo, ID_andar=id_andar, Capacidade=capacidade)
+    def criar_sala(cls, nome, tipo, id_andar, capacidade):
+        nova_sala = cls(Nome=nome, Tipo=tipo, ID_andar=id_andar, Capacidade=capacidade)
         db.session.add(nova_sala)
         db.session.commit()
         return nova_sala
