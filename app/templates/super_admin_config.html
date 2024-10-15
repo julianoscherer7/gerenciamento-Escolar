@@ -357,71 +357,30 @@
             </section>
         </div>
 
-        <!-- Formulário de Cadastro e Edição de Usuário -->
-    <section class="form-section">
-        <h2 class="text-center mb-4">Cadastro de Usuário</h2>
-        <form action="{{ url_for('admin.manage_users') }}" method="POST">
-            <input type="hidden" id="idUsuario" name="idUsuario" value="">
-            <div class="mb-3">
-                <label for="nomeUsuario" class="form-label">Nome</label>
-                <input type="text" class="form-control" id="nomeUsuario" name="nomeUsuario" placeholder="Insira o nome do usuário" required>
-            </div>
-            <div class="mb-3">
-                <label for="cargoUsuario" class="form-label">Cargo</label>
-                <select class="form-select" id="cargoUsuario" name="cargoUsuario" required>
-                    <option value="" selected disabled>Escolha o cargo</option>
-                    <option value="Administrador">Administrador</option>
-                    <option value="Professor">Professor</option>
-                    <option value="Aluno">Aluno</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="emailUsuario" class="form-label">E-mail</label>
-                <input type="email" class="form-control" id="emailUsuario" name="emailUsuario" placeholder="Insira o e-mail do usuário" required>
-            </div>
-            <div class="mb-3">
-                <label for="senhaUsuario" class="form-label">Senha</label>
-                <input type="password" class="form-control" id="senhaUsuario" name="senhaUsuario" placeholder="Insira a senha">
-            </div>
-            <button type="submit" name="createUser" class="btn btn-primary w-100">Registrar Usuário</button>
-        </form>
-    </section>
-
-    <!-- Tabela de Usuários -->
-    <section class="container mt-5">
-        <h3 class="text-center mb-4">Usuários Registrados</h3>
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Cargo</th>
-                    <th>Email</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for usuario in usuarios %}
-                <tr>
-                    <td>{{ usuario.ID_usuario }}</td>
-                    <td>{{ usuario.Nome }}</td>
-                    <td>{{ usuario.Cargo }}</td>
-                    <td>{{ usuario.Email }}</td>
-                    <td>
-                        <button class="btn btn-sm btn-warning" onclick="editUser('{{ usuario.ID_usuario }}', '{{ usuario.Nome }}', '{{ usuario.Cargo }}', '{{ usuario.Email }}')">
-                            Editar
-                        </button>
-                        <form action="{{ url_for('admin.delete_user', id=usuario.ID_usuario) }}" method="POST" style="display:inline-block;">
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja remover este usuário?')">
-                                Remover
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </section>
+        <div class="tab-pane fade" id="cadastro_usuarios">
+            <section class="form-section">
+                <h2 class="text-center mb-4">Cadastro de Usuários</h2>
+                <form>
+                    <div class="mb-3">
+                        <label for="nomeUsuario" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="nomeUsuario" placeholder="Insira o nome do usuário" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cargoUsuario" class="form-label">Cargo</label>
+                        <input type="text" class="form-control" id="cargoUsuario" placeholder="Insira o cargo do usuário" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="emailUsuario" class="form-label">E-mail</label>
+                        <input type="email" class="form-control" id="emailUsuario" placeholder="Insira o e-mail do usuário" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="senhaUsuario" class="form-label">Senha</label>
+                        <input type="password" class="form-control" id="senhaUsuario" placeholder="Insira a senha" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Registrar Usuário</button>
+                </form>
+            </section>
+        </div>
 
         <div class="tab-pane fade" id="cadastro_recursos">
             <section class="form-section">
@@ -522,18 +481,6 @@
                 themeSwitchAdmin.checked = document.body.classList.contains('dark-mode');
             }
         });
-    </script>
-
-    <script>
-        // Função para preencher o formulário com os dados do usuário a ser editado
-        function editUser(id, nome, cargo, email) {
-            document.getElementById('idUsuario').value = id;
-            document.getElementById('nomeUsuario').value = nome;
-            document.getElementById('cargoUsuario').value = cargo;
-            document.getElementById('emailUsuario').value = email;
-            document.querySelector('button[name="createUser"]').innerText = 'Atualizar Usuário';
-            document.querySelector('button[name="createUser"]').name = 'editarUsuario';
-        }
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
