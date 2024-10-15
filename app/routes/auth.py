@@ -37,20 +37,22 @@ def login():
         try:
             email = request.form.get('email')
             senha = request.form.get('password')
-            next_url = request.form.get('next') or url_for('main.home')
+            next_url = request.form.get('next') or request.args.get('next') or url_for('main.home')
             logger.debug(f"Tentativa de login para o email: {email}")
             
             usuario = Usuario.query.filter_by(Email=email).first()
             if usuario and usuario.check_senha(senha):
                 session['user_id'] = usuario.ID_usuario
                 logger.info(f"Login bem-sucedido para o usuário: {usuario.Nome}")
-                return jsonify({'success': True, 'redirect': next_url})
+                return redirect(next_url)
             else:
                 logger.warning(f"Falha no login para o email: {email}")
-                return jsonify({'success': False, 'message': 'Credenciais inválidas. Por favor, tente novamente.'})
+                flash('Credenciais inválidas. Por favor, tente novamente.', 'error')
+                return redirect(url_for('auth.login', next=next_url))
         except Exception as e:
             logger.error(f"Erro durante o login: {str(e)}")
-            return jsonify({'success': False, 'message': 'Ocorreu um erro durante o login. Por favor, tente novamente mais tarde.'}), 500
+            flash('Ocorreu um erro durante o login. Por favor, tente novamente mais tarde.', 'error')
+            return redirect(url_for('auth.login'))
     
     next_url = request.args.get('next', url_for('main.home'))
     return render_template('login.html', next=next_url)
