@@ -134,7 +134,7 @@
             </a>
             <div class="mx-auto">
                 <a href="#" class="navbar-brand">
-                    <img src="../static/logo.png" alt="Logo do Sistema" height="100">
+                    <img src="{{ url_for('main.serve_image', filename='logo.png') }}" alt="Logo do Sistema" height="100">
                 </a>
             </div>
             <div class="d-flex align-items-center">
@@ -320,24 +320,25 @@
 
     <div class="tab-content">
         <div class="tab-pane fade show active" id="cadastro_professores">
-            <section class="form-section">
+            <section class="form-section" id="form-professor">
                 <h2 class="text-center mb-4">Cadastro de Professores</h2>
-                <form>
+                <form id="formProfessor" action="{{ url_for('admin.manage_users') }}" method="POST">
+                    <input type="hidden" id="idProfessor" name="idProfessor" value="">
                     <div class="mb-3">
                         <label for="nomeProfessor" class="form-label">Nome do Professor</label>
-                        <input type="text" class="form-control" id="nomeProfessor" placeholder="Insira o nome do professor" required>
+                        <input type="text" class="form-control" id="nomeProfessor" name="nomeProfessor" placeholder="Insira o nome do professor" required>
                     </div>
                     <div class="mb-3">
                         <label for="areaProfessor" class="form-label">Área</label>
-                        <input type="text" class="form-control" id="areaProfessor" placeholder="Insira a área de especialização" required>
+                        <input type="text" class="form-control" id="areaProfessor" name="areaProfessor" placeholder="Insira a área de especialização" required>
                     </div>
                     <div class="mb-3">
                         <label for="cargaHoraria" class="form-label">Carga Horária (horas/semana)</label>
-                        <input type="number" class="form-control" id="cargaHoraria" placeholder="Insira a carga horária" required>
+                        <input type="number" class="form-control" id="cargaHoraria" name="cargaHoraria" placeholder="Insira a carga horária" required>
                     </div>
                     <div class="mb-3">
                         <label for="tipoContrato" class="form-label">Tipo de Contrato</label>
-                        <select class="form-select" id="tipoContrato" required>
+                        <select class="form-select" id="tipoContrato" name="tipoContrato" required>
                             <option value="" selected disabled>Escolha o tipo de contrato</option>
                             <option value="Efetivo">Efetivo</option>
                             <option value="Temporário">Temporário</option>
@@ -346,98 +347,134 @@
                     </div>
                     <div class="mb-3">
                         <label for="disponibilidade" class="form-label">Disponibilidade</label>
-                        <input type="text" class="form-control" id="disponibilidade" placeholder="Ex: Segunda a Sexta, manhã e tarde" required>
+                        <input type="text" class="form-control" id="disponibilidade" name="disponibilidade" placeholder="Ex: Segunda a Sexta, manhã e tarde" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="senhaProfessor" class="form-label">Senha</label>
-                        <input type="password" class="form-control" id="senhaProfessor" placeholder="Insira a senha do professor" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Registrar Professor</button>
+                    <button type="submit" id="btnSubmitProfessor" name="createProfessor" class="btn btn-primary w-100">Registrar Professor</button>
                 </form>
+            </section>
+
+            <section class="container mt-5">
+                <h3 class="text-center mb-4">Professores Cadastrados</h3>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Área</th>
+                            <th>Carga Horária</th>
+                            <th>Tipo de Contrato</th>
+                            <th>Disponibilidade</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for professor in professores %}
+                        <tr>
+                            <td>{{ professor.ID_professor }}</td>
+                            <td>{{ professor.Nome }}</td>
+                            <td>{{ professor.Area }}</td>
+                            <td>{{ professor.CargaHoraria }}</td>
+                            <td>{{ professor.TipoContrato }}</td>
+                            <td>{{ professor.Disponibilidade }}</td>
+                            <td>
+                                <a href="#form-professor" class="btn btn-sm btn-warning" onclick="editProfessor('{{ professor.ID_professor }}', '{{ professor.Nome }}', '{{ professor.Area }}', '{{ professor.CargaHoraria }}', '{{ professor.TipoContrato }}', '{{ professor.Disponibilidade }}')">
+                                    Editar
+                                </a>
+                                <form action="{{ url_for('admin.delete_professor', id=professor.ID_professor) }}" method="POST" style="display:inline-block;">
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja remover este professor?')">
+                                        Remover
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </section>
         </div>
 
-        <!-- Formulário de Cadastro e Edição de Usuário -->
-    <section class="form-section">
-        <h2 class="text-center mb-4">Cadastro de Usuário</h2>
-        <form action="{{ url_for('admin.manage_users') }}" method="POST">
-            <input type="hidden" id="idUsuario" name="idUsuario" value="">
-            <div class="mb-3">
-                <label for="nomeUsuario" class="form-label">Nome</label>
-                <input type="text" class="form-control" id="nomeUsuario" name="nomeUsuario" placeholder="Insira o nome do usuário" required>
-            </div>
-            <div class="mb-3">
-                <label for="cargoUsuario" class="form-label">Cargo</label>
-                <select class="form-select" id="cargoUsuario" name="cargoUsuario" required>
-                    <option value="" selected disabled>Escolha o cargo</option>
-                    <option value="Administrador">Administrador</option>
-                    <option value="Professor">Professor</option>
-                    <option value="Aluno">Aluno</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="emailUsuario" class="form-label">E-mail</label>
-                <input type="email" class="form-control" id="emailUsuario" name="emailUsuario" placeholder="Insira o e-mail do usuário" required>
-            </div>
-            <div class="mb-3">
-                <label for="senhaUsuario" class="form-label">Senha</label>
-                <input type="password" class="form-control" id="senhaUsuario" name="senhaUsuario" placeholder="Insira a senha">
-            </div>
-            <button type="submit" name="createUser" class="btn btn-primary w-100">Registrar Usuário</button>
-        </form>
-    </section>
+        <div class="tab-pane fade" id="cadastro_usuarios">
+            <section class="form-section">
+                <h2 class="text-center mb-4">Cadastro de Usuário</h2>
+                <form action="{{ url_for('admin.manage_users') }}" method="POST">
+                    <input type="hidden" id="idUsuario" name="idUsuario" value="">
+                    <div class="mb-3">
+                        <label for="nomeUsuario" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="nomeUsuario" name="nomeUsuario" placeholder="Insira o nome do usuário" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cargoUsuario" class="form-label">Cargo</label>
+                        <select class="form-select" id="cargoUsuario" name="cargoUsuario" required>
+                            <option value="" selected disabled>Escolha o cargo</option>
+                            <option value="Administrador">Administrador</option>
+                            <option value="Professor">Professor</option>
+                            <option value="Aluno">Aluno</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="emailUsuario" class="form-label">E-mail</label>
+                        <input type="email" class="form-control" id="emailUsuario" name="emailUsuario" placeholder="Insira o e-mail do usuário" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="senhaUsuario" class="form-label">Senha</label>
+                        <input type="password" class="form-control" id="senhaUsuario" name="senhaUsuario" placeholder="Insira a senha">
+                    </div>
+                    <button type="submit" name="createUser" class="btn btn-primary w-100">Registrar Usuário</button>
+                </form>
+            </section>
 
-    <!-- Tabela de Usuários -->
-    <section class="container mt-5">
-        <h3 class="text-center mb-4">Usuários Registrados</h3>
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Cargo</th>
-                    <th>Email</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for usuario in usuarios %}
-                <tr>
-                    <td>{{ usuario.ID_usuario }}</td>
-                    <td>{{ usuario.Nome }}</td>
-                    <td>{{ usuario.Cargo }}</td>
-                    <td>{{ usuario.Email }}</td>
-                    <td>
-                        <button class="btn btn-sm btn-warning" onclick="editUser('{{ usuario.ID_usuario }}', '{{ usuario.Nome }}', '{{ usuario.Cargo }}', '{{ usuario.Email }}')">
-                            Editar
-                        </button>
-                        <form action="{{ url_for('admin.delete_user', id=usuario.ID_usuario) }}" method="POST" style="display:inline-block;">
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja remover este usuário?')">
-                                Remover
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </section>
+            <section class="container mt-5">
+                <h3 class="text-center mb-4">Usuários Registrados</h3>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Cargo</th>
+                            <th>Email</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usuario in usuarios %}
+                        <tr>
+                            <td>{{ usuario.ID_usuario }}</td>
+                            <td>{{ usuario.Nome }}</td>
+                            <td>{{ usuario.Cargo }}</td>
+                            <td>{{ usuario.Email }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-warning" onclick="editUser('{{ usuario.ID_usuario }}', '{{ usuario.Nome }}', '{{ usuario.Cargo }}', '{{ usuario.Email }}')">
+                                    Editar
+                                </button>
+                                <form action="{{ url_for('admin.delete_user', id=usuario.ID_usuario) }}" method="POST" style="display:inline-block;">
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja remover este usuário?')">
+                                        Remover
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        </div>
 
         <div class="tab-pane fade" id="cadastro_recursos">
-            <section class="form-section">
+            <section class="form-section" id="form-recurso">
                 <h2 class="text-center mb-4">Cadastro de Recursos Alugáveis</h2>
-                <form>
+                <form id="formRecurso" action="{{ url_for('admin.manage_users') }}" method="POST">
+                    <input type="hidden" id="idRecurso" name="idRecurso" value="">
                     <div class="mb-3">
                         <label for="quantidadeRecurso" class="form-label">Quantidade</label>
-                        <input type="number" class="form-control" id="quantidadeRecurso" placeholder="Insira a quantidade de recursos" required>
+                        <input type="number" class="form-control" id="quantidadeRecurso" name="quantidadeRecurso" placeholder="Insira a quantidade de recursos" required>
                     </div>
                     <div class="mb-3">
                         <label for="identificacaoRecurso" class="form-label">Identificação</label>
-                        <input type="text" class="form-control" id="identificacaoRecurso" placeholder="Insira a identificação do recurso" required>
+                        <input type="text" class="form-control" id="identificacaoRecurso" name="identificacaoRecurso" placeholder="Insira a identificação do recurso" required>
                     </div>
                     <div class="mb-3">
                         <label for="statusRecurso" class="form-label">Status</label>
-                        <select class="form-select" id="statusRecurso" required>
+                        <select class="form-select" id="statusRecurso" name="statusRecurso" required>
                             <option value="" selected disabled>Escolha o status do recurso</option>
                             <option value="Disponível">Disponível</option>
                             <option value="Em Uso">Em Uso</option>
@@ -445,8 +482,43 @@
                             <option value="Manutenção">Manutenção</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">Registrar Recurso</button>
+                    <button type="submit" id="btnSubmitRecurso" name="createRecurso" class="btn btn-primary w-100">Registrar Recurso</button>
                 </form>
+            </section>
+
+            <section class="container mt-5">
+                <h3 class="text-center mb-4">Recursos Cadastrados</h3>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Quantidade</th>
+                            <th>Identificação</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for recurso in recursos %}
+                        <tr>
+                            <td>{{ recurso.ID_recurso }}</td>
+                            <td>{{ recurso.Quantidade }}</td>
+                            <td>{{ recurso.Identificacao }}</td>
+                            <td>{{ recurso.Status }}</td>
+                            <td>
+                                <a href="#form-recurso" class="btn btn-sm btn-warning" onclick="editRecurso('{{ recurso.ID_recurso }}', '{{ recurso.Quantidade }}', '{{ recurso.Identificacao }}', '{{ recurso.Status }}')">
+                                    Editar
+                                </a>
+                                <form action="{{ url_for('admin.delete_recurso', id=recurso.ID_recurso) }}" method="POST" style="display:inline-block;">
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja remover este recurso?')">
+                                        Remover
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </section>
         </div>
     </div>
@@ -525,14 +597,39 @@
     </script>
 
     <script>
-        // Função para preencher o formulário com os dados do usuário a ser editado
+        // Função para editar professor
+        function editProfessor(id, nome, area, cargaHoraria, tipoContrato, disponibilidade) {
+            document.getElementById('idProfessor').value = id;
+            document.getElementById('nomeProfessor').value = nome;
+            document.getElementById('areaProfessor').value = area;
+            document.getElementById('cargaHoraria').value = cargaHoraria;
+            document.getElementById('tipoContrato').value = tipoContrato;
+            document.getElementById('disponibilidade').value = disponibilidade;
+            document.getElementById('btnSubmitProfessor').innerText = 'Atualizar Professor';
+            document.getElementById('btnSubmitProfessor').name = 'editProfessor';
+            document.getElementById('form-professor').scrollIntoView({behavior: 'smooth'});
+        }
+
+        // Função para editar recurso
+        function editRecurso(id, quantidade, identificacao, status) {
+            document.getElementById('idRecurso').value = id;
+            document.getElementById('quantidadeRecurso').value = quantidade;
+            document.getElementById('identificacaoRecurso').value = identificacao;
+            document.getElementById('statusRecurso').value = status;
+            document.getElementById('btnSubmitRecurso').innerText = 'Atualizar Recurso';
+            document.getElementById('btnSubmitRecurso').name = 'editRecurso';
+            document.getElementById('form-recurso').scrollIntoView({behavior: 'smooth'});
+        }
+
+        // Função para editar usuário (já existente, apenas adicionando a âncora)
         function editUser(id, nome, cargo, email) {
             document.getElementById('idUsuario').value = id;
             document.getElementById('nomeUsuario').value = nome;
             document.getElementById('cargoUsuario').value = cargo;
             document.getElementById('emailUsuario').value = email;
             document.querySelector('button[name="createUser"]').innerText = 'Atualizar Usuário';
-            document.querySelector('button[name="createUser"]').name = 'editarUsuario';
+            document.querySelector('button[name="createUser"]').name = 'editUser';
+            document.getElementById('form-usuario').scrollIntoView({behavior: 'smooth'});
         }
     </script>
 
