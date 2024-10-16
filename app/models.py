@@ -87,7 +87,7 @@ class Sala(db.Model):
     recursos = db.relationship('Recurso', backref='sala', lazy=True)
 
     def __repr__(self):
-        return f'<Sala {self.ID_sala} do Andar {self.ID_andar}>'
+        return f'<Sala {self.Nome} do Andar {self.ID_andar}>'
 
     @classmethod
     def criar_sala(cls, nome, tipo, id_andar, capacidade):
@@ -172,11 +172,11 @@ class Turma(db.Model):
     dias = db.relationship('TurmaDia', backref='turma', lazy=True)
 
     def __repr__(self):
-        return f'<Turma {self.ID_turma} do Curso {self.Curso}>'
+        return f'<Turma {self.Curso}>'
 
     @classmethod
     def criar_turma(cls, quantidade, data_inicio, data_fim, id_turno, curso, cor):
-        nova_turma = cls(Quantidade=quantidade, Data_inicio=data_inicio, Data_Fim=data_fim,
+        nova_turma = cls(Quantidade=quantidade, Data_inicio=data_inicio, Data_Fim=data_fim, 
                          ID_turno=id_turno, Curso=curso, Cor=cor)
         db.session.add(nova_turma)
         db.session.commit()
@@ -212,126 +212,55 @@ class Dia(db.Model):
         return cls.query.all()
 
 class Professor(db.Model):
+    __tablename__ = 'professores'
     ID_professor = db.Column(db.Integer, primary_key=True)
     Nome = db.Column(db.String(100), nullable=False)
     Area = db.Column(db.String(50))
     CargaHoraria = db.Column(db.Integer)
     TipoContrato = db.Column(db.String(50))
-    
-    disponibilidades = db.relationship('DisponibilidadeProfessor', 
-                                       back_populates='professor',
-                                       foreign_keys='DisponibilidadeProfessor.ID_professor')
 
-class DisponibilidadeProfessor(db.Model):
-    ID = db.Column(db.Integer, primary_key=True)
-    ID_professor = db.Column(db.Integer, db.ForeignKey('professor.ID_professor'), nullable=False)
-    ID_disponibilidade = db.Column(db.Integer, db.ForeignKey('disponibilidade.ID'), nullable=False)
-    
-    professor = db.relationship('Professor', back_populates='disponibilidades')
-    disponibilidade = db.relationship('Disponibilidade')
-
-class Agendamento(db.Model):
-    __tablename__ = 'agendamentos'
-    ID_agendamento = db.Column(db.Integer, primary_key=True)
-    TimeStamp_inicio = db.Column(db.DateTime, nullable=False)
-    ID_locatario = db.Column(db.Integer, nullable=False)
-    Tipo_locatario = db.Column(db.String(50), nullable=False)
-    ID_turma = db.Column(db.Integer, db.ForeignKey('turmas.ID_turma'))
-    TimeStamp_fim = db.Column(db.DateTime, nullable=False)
+    disponibilidades = db.relationship('DisponibilidadeProfessor', backref='professor', lazy=True)
 
     def __repr__(self):
-        return f'<Agendamento {self.ID_agendamento}>'
+        return f'<Professor {self.Nome}>'
 
-    # Função de criação de agendamento (mantida)
     @classmethod
-    def criar_agendamento(cls, timestamp_inicio, id_locatario, tipo_locatario, id_turma, timestamp_fim):
-        novo_agendamento = cls(TimeStamp_inicio=timestamp_inicio, ID_locatario=id_locatario,
-                               Tipo_locatario=tipo_locatario, ID_turma=id_turma, TimeStamp_fim=timestamp_fim)
-        db.session.add(novo_agendamento)
-        db.session.commit()
-        return novo_agendamento
-
-    # Listar todos os agendamentos (mantido)
-    @classmethod
-    def listar_agendamentos(cls):
+    def listar_professores(cls):
         return cls.query.all()
 
-    # 1. Validação de Disponibilidade de Sala
-    @classmethod
-    def validar_disponibilidade(cls, timestamp_inicio, timestamp_fim, id_turma):
-        conflito = cls.query.filter(
-            cls.ID_turma == id_turma,
-            cls.TimeStamp_inicio < timestamp_fim,
-            cls.TimeStamp_fim > timestamp_inicio
-        ).first()
-        return conflito is None  # Se não houver conflitos, a sala está disponível
+class DisponibilidadeProfessor(db.Model):
+    __tablename__ = 'disponibilidades_professor'
+    ID_disponibilidade_professor = db.Column(db.Integer, primary_key=True)
+    ID_professor = db.Column(db.Integer, db.ForeignKey('professores.ID_professor'), nullable=False)
+    ID_dia = db.Column(db.Integer, db.ForeignKey('dias.ID_dia'), nullable=False)
+    ID_turno = db.Column(db.Integer, db.ForeignKey('turnos.ID_turno'), nullable=False)
 
-    # 2. Gerenciamento de Horários Recorrentes
-    @classmethod
-    def criar_agendamento_recorrente(cls, timestamp_inicio, id_locatario, tipo_locatario, id_turma, timestamp_fim, frequencia, repeticoes):
-        agendamentos = []
-        for _ in range(repeticoes):
-            if cls.validar_disponibilidade(timestamp_inicio, timestamp_fim, id_turma):
-                novo_agendamento = cls.criar_agendamento(timestamp_inicio, id_locatario, tipo_locatario, id_turma, timestamp_fim)
-                agendamentos.append(novo_agendamento)
-                # Incrementar o timestamp_inicio e timestamp_fim com base na frequência
-                timestamp_inicio += frequencia
-                timestamp_fim += frequencia
-            else:
-                break
-        return agendamentos
-
-    # 3. Listagem de Agendamentos por Sala
-    @classmethod
-    def listar_agendamentos_por_sala(cls, id_turma, data_inicio=None, data_fim=None):
-        query = cls.query.filter_by(ID_turma=id_turma)
-        if data_inicio and data_fim:
-            query = query.filter(cls.TimeStamp_inicio >= data_inicio, cls.TimeStamp_fim <= data_fim)
-        return query.all()
-
-    # 4. Listagem de Agendamentos por Turma
-    @classmethod
-    def listar_agendamentos_por_turma(cls, id_turma):
-        return cls.query.filter_by(ID_turma=id_turma).all()
+    def __repr__(self):
+        return f'<DisponibilidadeProfessor {self.ID_disponibilidade_professor}>'
 
 class Turno(db.Model):
     __tablename__ = 'turnos'
     ID_turno = db.Column(db.Integer, primary_key=True)
-    Nome_turno = db.Column(db.String(50), nullable=False)
-    HorarioInicio = db.Column(db.Time, nullable=False)
-    HorarioFim = db.Column(db.Time, nullable=False)
-    Cor = db.Column(db.String(20))
+    Nome = db.Column(db.String(50), nullable=False)
 
     def __repr__(self):
-        return f'<Turno {self.Nome_turno}>'
-
-    @classmethod
-    def criar_turno(cls, nome_turno, horario_inicio, horario_fim, cor):
-        novo_turno = cls(Nome_turno=nome_turno, HorarioInicio=horario_inicio, HorarioFim=horario_fim, Cor=cor)
-        db.session.add(novo_turno)
-        db.session.commit()
-        return novo_turno
+        return f'<Turno {self.Nome}>'
 
     @classmethod
     def listar_turnos(cls):
         return cls.query.all()
 
-class Disponibilidade(db.Model):
-    __tablename__ = 'disponibilidade'
-    ID = db.Column(db.Integer, primary_key=True)
-    ID_dia = db.Column(db.Integer, db.ForeignKey('dias.ID_dia'), nullable=False)
-    ID_turno = db.Column(db.Integer, db.ForeignKey('turnos.ID_turno'), nullable=False)
+class Agendamento(db.Model):
+    __tablename__ = 'agendamentos'
+    ID_agendamento = db.Column(db.Integer, primary_key=True)
+    TimeStamp_inicio = db.Column(db.DateTime, nullable=False)
+    TimeStamp_fim = db.Column(db.DateTime, nullable=False)
+    ID_sala = db.Column(db.Integer, db.ForeignKey('salas.ID_sala'), nullable=False)
+    ID_usuario = db.Column(db.Integer, db.ForeignKey('usuarios.ID_usuario'), nullable=False)
 
     def __repr__(self):
-        return f'<Disponibilidade {self.ID}>'
+        return f'<Agendamento {self.ID_agendamento}>'
 
     @classmethod
-    def adicionar_disponibilidade(cls, id_dia, id_turno):
-        nova_disponibilidade = cls(ID_dia=id_dia, ID_turno=id_turno)
-        db.session.add(nova_disponibilidade)
-        db.session.commit()
-        return nova_disponibilidade
-
-    @classmethod
-    def listar_disponibilidades(cls):
+    def listar_agendamentos(cls):
         return cls.query.all()
